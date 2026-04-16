@@ -1,0 +1,106 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Courier New', monospace;
+    background-color: #70c5ce;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#game-container {
+    position: relative;
+    width: 400px;
+    height: 600px;
+    border: 2px solid #000;
+    background-color: #70c5ce;
+}
+
+#game-canvas {
+    display: block;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+#ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.screen {
+    text-align: center;
+    color: #fff;
+    text-shadow: 2px 2px 0px #000;
+    font-size: 24px;
+    display: none;
+}
+
+.screen h1, .screen h2 {
+    margin: 0 0 20px 0;
+}
+
+.screen p {
+    margin: 10px 0;
+}
+
+.screen button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: #fff;
+    border: 2px solid #000;
+    pointer-events: auto;
+}
+
+#score-display {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 32px;
+    color: #fff;
+    text-shadow: 2px 2px 0px #000;
+    display: none;
+}
+
+#mute-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #fff;
+    border: 2px solid #000;
+    pointer-events: auto;
+}
+
+#leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+    text-align: left;
+}
+
+#leaderboard-list li {
+    margin: 5px 0;
+    font-size: 18px;
+}
+
+@media (max-width: 600px) {
+    #game-container {
+        width: 100vw;
+        height: 100vh;
+        border: none;
+    }
+}
