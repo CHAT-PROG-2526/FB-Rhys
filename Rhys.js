@@ -1,7 +1,7 @@
 // Game constants
 const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 600;
-const GRAVITY = 0.375;
+const GRAVITY = 0.325;
 const FLAP_STRENGTH = -9.4;
 const DIVE_STRENGTH = 8.5;
 const PIPE_WIDTH = 80;
