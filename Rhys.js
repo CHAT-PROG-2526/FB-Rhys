@@ -1,7 +1,7 @@
 // Game constants
 const CANVAS_WIDTH = 400;
 const CANVAS_HEIGHT = 600;
-const GRAVITY = 0.325;
+const GRAVITY = 0.375;
 const FLAP_STRENGTH = -9.4;
 const DIVE_STRENGTH = 8.5;
 const PIPE_WIDTH = 80;
@@ -30,6 +30,7 @@ let cloudOffset = 0;
 let wingFlapTime = 0;
 let skyscraperAnimTime = 0;
 let debugMode = false;
+let disableCollision = false;
 let muted = false;
 let scaleX, scaleY;
 
@@ -95,16 +96,21 @@ function initAudio() {
     bgMusic = new Audio();
     flapSound = new Audio();
     pointSound = new Audio();
-    crashSound = new Audio();    function checkCollision() {
-        for (let pipe of pipes) {
-            if (bird.x + BIRD_SIZE / 2 > pipe.x && bird.x - BIRD_SIZE / 2 < pipe.x + PIPE_WIDTH) {
-                if (bird.y - BIRD_SIZE / 2 < pipe.gapY || bird.y + BIRD_SIZE / 2 > pipe.gapY + PIPE_GAP) {
-                    return true;
-                }
-            }
-        }
+    crashSound = new Audio();
+}
+
+function checkCollision() {
+    if (debugMode && disableCollision) {
         return false;
     }
+    for (let pipe of pipes) {
+        if (bird.x + BIRD_SIZE / 2 > pipe.x && bird.x - BIRD_SIZE / 2 < pipe.x + PIPE_WIDTH) {
+            if (bird.y - BIRD_SIZE / 2 < pipe.gapY || bird.y + BIRD_SIZE / 2 > pipe.gapY + PIPE_GAP) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 // Game loop
@@ -140,15 +146,15 @@ function update() {
 function updateSkyscraperEnd() {
     skyscraperAnimTime += 0.05;
     
-    // Bird flies toward center of screen and rises
-    const duration = 2;
+    // Bird flies toward right side towers
+    const duration = 3;
     const progress = Math.min(1, skyscraperAnimTime / duration);
-    bird.x = 100 + progress * 150;
-    bird.y = 300 - progress * 200;
+    bird.x = 100 + progress * 180;
+    bird.y = 300 - progress * 100;
     bird.vy = 0;
     
     // Trigger explosion at end and go to game over
-    if (progress >= 0.95) {
+    if (progress >= 0.9) {
         gameState = 'GAME_OVER';
         currentScoreEl.textContent = `Score: ${score}`;
         bestScoreGoEl.textContent = `Best Score: ${bestScore}`;
@@ -374,7 +380,9 @@ function drawDebugInfo() {
         `Pipes: ${pipes.length}`,
         `Speed Inc: ${speedIncrease.toFixed(2)}`,
         `Collision: ${checkCollision() ? 'YES' : 'NO'}`,
-        `Debug: ON (Press D to toggle)`
+        `Collision OFF: ${disableCollision ? 'YES' : 'NO'}`,
+        `Press D: Toggle Debug`,
+        `Press C: Toggle Collision`
     ];
     
     debugLines.forEach((line, i) => {
@@ -475,35 +483,35 @@ function drawBird() {
 }
 
 function drawSkyscrapers() {
-    const progress = Math.min(1, skyscraperAnimTime / 2);
+    const progress = Math.min(1, skyscraperAnimTime / 3);
     
-    // Left skyscraper
+    // First tower on right side
     ctx.fillStyle = '#555555';
-    ctx.fillRect(20, CANVAS_HEIGHT - BUILDING_HEIGHT, BUILDING_WIDTH, BUILDING_HEIGHT);
+    ctx.fillRect(CANVAS_WIDTH - BUILDING_WIDTH - 30, CANVAS_HEIGHT - BUILDING_HEIGHT, BUILDING_WIDTH, BUILDING_HEIGHT);
     
-    // Right skyscraper
+    // Second tower on right side (stacked closer)
     ctx.fillStyle = '#555555';
-    ctx.fillRect(CANVAS_WIDTH - BUILDING_WIDTH - 20, CANVAS_HEIGHT - BUILDING_HEIGHT, BUILDING_WIDTH, BUILDING_HEIGHT);
+    ctx.fillRect(CANVAS_WIDTH - BUILDING_WIDTH * 2 - 50, CANVAS_HEIGHT - BUILDING_HEIGHT, BUILDING_WIDTH, BUILDING_HEIGHT);
     
-    // Windows on left building
+    // Windows on first tower
     ctx.fillStyle = '#FFFF00';
     for (let row = 0; row < 12; row++) {
         for (let col = 0; col < 3; col++) {
-            ctx.fillRect(35 + col * 25, CANVAS_HEIGHT - BUILDING_HEIGHT + 30 + row * 30, 15, 15);
+            ctx.fillRect(CANVAS_WIDTH - BUILDING_WIDTH - 25 + col * 25, CANVAS_HEIGHT - BUILDING_HEIGHT + 30 + row * 30, 15, 15);
         }
     }
     
-    // Windows on right building
+    // Windows on second tower
     ctx.fillStyle = '#FFFF00';
     for (let row = 0; row < 12; row++) {
         for (let col = 0; col < 3; col++) {
-            ctx.fillRect(CANVAS_WIDTH - BUILDING_WIDTH + 5 + col * 25, CANVAS_HEIGHT - BUILDING_HEIGHT + 30 + row * 30, 15, 15);
+            ctx.fillRect(CANVAS_WIDTH - BUILDING_WIDTH * 2 - 45 + col * 25, CANVAS_HEIGHT - BUILDING_HEIGHT + 30 + row * 30, 15, 15);
         }
     }
     
     // Draw explosion effect when bird reaches buildings
-    if (progress > 0.85) {
-        const explosionIntensity = (progress - 0.85) * 20;
+    if (progress > 0.8) {
+        const explosionIntensity = (progress - 0.8) * 20;
         
         // Orange explosion circles
         ctx.fillStyle = '#FF6347';
@@ -566,6 +574,8 @@ function handleKey(e) {
         }
     } else if (e.code === 'KeyD') {
         debugMode = !debugMode;
+    } else if (e.code === 'KeyC' && debugMode) {
+        disableCollision = !disableCollision;
     }
 }
 
@@ -596,6 +606,7 @@ function gameOver() {
 
 function restartGame() {
     gameState = 'TITLE';
+    resetGame();
     showScreen(titleScreen);
     updateBestScoreDisplay();
 }
@@ -618,18 +629,6 @@ function dive() {
 function generatePipe() {
     const gapY = Math.random() * (CANVAS_HEIGHT - GROUND_HEIGHT - PIPE_GAP - 100) + 50;
     pipes.push({ x: CANVAS_WIDTH, gapY, passed: false });
-}
-
-// Collision detection
-function checkCollision() {
-    for (let pipe of pipes) {
-        if (bird.x + BIRD_SIZE / 2 > pipe.x && bird.x - BIRD_SIZE / 2 < pipe.x + PIPE_WIDTH) {
-            if (bird.y - BIRD_SIZE / 2 < pipe.gapY || bird.y + BIRD_SIZE / 2 > pipe.gapY + PIPE_GAP) {
-                return true;
-            }
-        }
-    }
-    return false;
 }
 
 // UI functions
@@ -735,6 +734,7 @@ function resetGame() {
     cloudOffset = 0;
     wingFlapTime = 0;
     skyscraperAnimTime = 0;
+    disableCollision = false;
 }
 
 // Start the game
