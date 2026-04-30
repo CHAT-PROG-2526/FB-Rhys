@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=Index.html">
+    <title>Redirecting...</title>
+</head>
+<body>
+    <p>Redirecting to <a href="Index.html">Index.html</a>...</p>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird</title>
+    <link rel="stylesheet" href="Rhys.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        <div id="ui-overlay">
+            <div id="title-screen" class="screen">
+                <h1>Flappy Bird</h1>
+                <p id="best-score">Best Score: 0</p>
+                <p>Tap or press Space/Up to flap, Down to dive</p>
+                <button id="leaderboard-btn">Leaderboard</button>
+            </div>
+            <div id="ready-screen" class="screen">
+                <h2>Get Ready</h2>
+            </div>
+            <div id="game-over-screen" class="screen">
+                <h2>Game Over</h2>
+                <p id="current-score">Score: 0</p>
+                <p id="best-score-go">Best Score: 0</p>
+                <button id="restart-btn">Restart</button>
+                <button id="leaderboard-btn-go">Leaderboard</button>
+            </div>
+            <div id="leaderboard-screen" class="screen">
+                <h2>Leaderboard</h2>
+                <ul id="leaderboard-list"></ul>
+                <button id="back-btn">Back</button>
+            </div>
+            <div id="score-display">0</div>
+            <button id="mute-btn">Mute</button>
+            <div id="version-badge">v1.1</div>
+        </div>
+    </div>
+    <script src="Rhys.js"></script>
+</body>
+</html>
