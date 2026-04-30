@@ -85,6 +85,20 @@ body {
     pointer-events: auto;
 }
 
+#version-badge {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    padding: 6px 10px;
+    font-size: 14px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.65);
+    border: 2px solid #000;
+    border-radius: 4px;
+    text-shadow: 1px 1px 0 #000;
+    pointer-events: none;
+}
+
 #leaderboard-list {
     list-style: none;
     padding: 0;
