@@ -605,9 +605,9 @@ function gameOver() {
 }
 
 function restartGame() {
-    gameState = 'TITLE';
+    gameState = 'READY';
     resetGame();
-    showScreen(titleScreen);
+    showScreen(readyScreen);
     updateBestScoreDisplay();
 }
 
