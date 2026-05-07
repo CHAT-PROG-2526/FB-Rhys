@@ -163,6 +163,8 @@ function updateSkyscraperEnd() {
         stopBgMusic();
         playSound(crashSound);
         showScreen(gameOverScreen);
+        // Expose to window for testing
+        window.gameState = gameState;
     }
 }
 
@@ -210,11 +212,15 @@ function updatePlaying() {
             score++;
             playSound(pointSound);
             speedIncrease = Math.floor(score / 10) * 0.5;
+            // Expose to window for testing
+            window.score = score;
             
             // Check if reached 99 points - trigger special ending
             if (score === 99) {
                 gameState = 'SKYSCRAPER_END';
                 skyscraperAnimTime = 0;
+                // Expose to window for testing
+                window.gameState = gameState;
                 return;
             }
         }
@@ -585,12 +591,16 @@ function startGame() {
     showScreen(readyScreen);
     resetGame();
     playBgMusic();
+    // Expose to window for testing
+    window.gameState = gameState;
 }
 
 function startPlaying() {
     gameState = 'PLAYING';
     hideScreens();
     flap();
+    // Expose to window for testing
+    window.gameState = gameState;
 }
 
 function gameOver() {
@@ -602,6 +612,8 @@ function gameOver() {
     addToLeaderboard();
     stopBgMusic();
     playSound(crashSound);
+    // Expose to window for testing
+    window.gameState = gameState;
 }
 
 function restartGame() {
@@ -609,6 +621,8 @@ function restartGame() {
     resetGame();
     showScreen(readyScreen);
     updateBestScoreDisplay();
+    // Expose to window for testing
+    window.gameState = gameState;
 }
 
 // Bird flap
@@ -648,12 +662,16 @@ function showLeaderboard() {
     gameState = 'LEADERBOARD';
     showScreen(leaderboardScreen);
     displayLeaderboard();
+    // Expose to window for testing
+    window.gameState = gameState;
 }
 
 function hideLeaderboard() {
     if (gameState === 'LEADERBOARD') {
         gameState = 'TITLE';
         showScreen(titleScreen);
+        // Expose to window for testing
+        window.gameState = gameState;
     }
 }
 
@@ -735,7 +753,13 @@ function resetGame() {
     wingFlapTime = 0;
     skyscraperAnimTime = 0;
     disableCollision = false;
+    // Expose to window for testing
+    window.score = score;
 }
 
 // Start the game
 init();
+
+// Initial exposure to window for testing/debugging
+window.gameState = gameState;
+window.score = score;
